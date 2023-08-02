@@ -7,17 +7,17 @@ function Home() {
 
   return (
     
-    <div className='max-w-7xl mx-auto flex flex-col gap-5'>
-      <div className='bg-teal-500 text-white text-center font-semibold text-5xl py-10 rounded mt-2'>
+    <div className='max-w-6xl mx-auto flex flex-col gap-5'>
+      <div className=' border bg-white text-teal-500 shadow-md text-center font-semibold text-5xl py-10 rounded mt-2'>
         <h1>ITEM LIST</h1>
       </div>
-      <div className='flex flex-row bg-red-200'>
+      <div className='flex flex-row'>
         <div className=''>
           <Input />
         </div>
         <div>
           <button
-            className='px-4 py-2 bg-cyan-500 text-white rounded'
+            className='px-4 py-2 bg-teal-500 text-white rounded font-semibold hover:bg-teal-700'
             onClick={onAddOpen}
           >
             Add Item

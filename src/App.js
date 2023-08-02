@@ -4,7 +4,7 @@ import Login from "./pages/Login";
 
 function App() {
   return (
-    <div>
+    <div className="bg-neutral-50">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
