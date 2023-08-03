@@ -2,6 +2,8 @@ import React from 'react'
 import { Card, CardHeader, CardBody, CardFooter, Heading, Image, Divider, ButtonGroup, Button, Text, Stack, Input, ModalOverlay, Modal, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, useDisclosure, AspectRatio } from '@chakra-ui/react'
 import EditItemModal from './EditItemModal'
 import DeleteItemModal from './DeleteItemModal'
+import { BiEdit, BiTrash } from 'react-icons/bi';
+import { formatRupiah } from '../utils/formatRupiah'
 
 function ItemCard({ item }) {
   const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure()
@@ -10,48 +12,57 @@ function ItemCard({ item }) {
   return (
 
     <div>
-      <Card maxW='sm'>
-        <CardBody>
-          <AspectRatio ratio={1}>
-            <Image
-              ratio={1 / 1}
-              src={item.image}
-              alt='Green double couch with wooden legs'
-              borderRadius='lg'
-            />
+      <Card>
+        <AspectRatio ratio={1}>
+          <Image
+            ratio={1 / 1}
+            src={item.image}
+            alt='Green double couch with wooden legs'
+            borderTopRadius="lg"
+          />
 
-          </AspectRatio>
-          <Stack mt='6' spacing='3'>
-            <p className='text-2xl font-semibold' >{item.name}</p>
-            <div className='flex'>
-              <div className='flex flex-col w-1/2 text-left'>
-                <p className='text-sm lg:text-md'>Buy Price</p>
-                <p className='font-semibold text-md lg:text-xl'>
-                  {item.buy_price}
+        </AspectRatio>
+        <CardBody py={"1"} px={"2"}>
+          <Stack>
+            <p className='text-md sm:text-lg md:text-2xl font-semibold truncate' >{item.name}</p>
+            <div className='flex flex-col sm:flex-row gap-1'>
+              <div className='flex flex-col sm:w-1/2 text-left -space-y-1 sm:-space-y-0'>
+                <p className='text-xs lg:text-md text-neutral-500'>Buy Price</p>
+                <p className='font-semibold text-xs lg:text-base xl:text-xl'>
+                  {formatRupiah(item.buy_price)}
                 </p>
               </div>
-              <div className='flex flex-col w-1/2 text-right'>
-                <p className='text-sm lg:text-md'>Sell Price</p>
-                <p className='font-semibold text-md lg:text-xl'>
-                  {item.sell_price}
+              <div className='flex flex-col sm:w-1/2 sm:text-right -space-y-1 sm:-space-y-0'>
+                <p className='text-xs lg:text-md text-neutral-500'>Sell Price</p>
+                <p className='font-semibold text-xs lg:text-base xl:text-xl'>
+                  {formatRupiah(item.sell_price)}
                 </p>
               </div>
             </div>
+            <div className='text-right text-neutral-500'>
+              {/* <p>Stock {item.stock}</p> */}
+            </div>
           </Stack>
         </CardBody>
-        <Divider />
-        <CardFooter className='flex justify-end'>
-          <ButtonGroup spacing='2'>
-            <Button variant='solid' colorScheme='green' onClick={onEditOpen}>
-              Edit
-            </Button>
-            <EditItemModal item={item} isOpen={isEditOpen} onClose={onEditClose} />
-            <Button variant='solid' colorScheme='red' onClick={onDeleteOpen}>
-              Delete
-            </Button>
+        <Divider className='text-neutral-300'/>
+        <div className='flex gap-1 justify-end p-2'>
+          <div
+            className='flex gap-2 items-center w-1/2 justify-center px-2 md:px-4 py-1 sm:py-2 text-xs sm:text-base bg-green-500 hover:bg-green-600 text-white font-semibold rounded cursor-pointer'
+            onClick={onEditOpen}>
+            <BiEdit />
+            <p className='hidden xl:block'>Edit</p>
+          </div>
+          <EditItemModal item={item} isOpen={isEditOpen} onClose={onEditClose} />
+          <div
+            className='flex gap-2 items-center w-1/2 justify-center px-2 md:px-4 py-1 sm:py-2 text-xs sm:text-base bg-red-500 hover:bg-red-600 text-white font-semibold rounded cursor-pointer'
+            onClick={onDeleteOpen}>
+            <BiTrash />
+            <p className='hidden xl:block'>Delete</p>
+          </div>
+          <div className='hidden'>
             <DeleteItemModal item={item} isOpen={isDeleteOpen} onClose={onDeleteClose} />
-          </ButtonGroup>
-        </CardFooter>
+          </div>
+        </div>
       </Card>
     </div>
   )

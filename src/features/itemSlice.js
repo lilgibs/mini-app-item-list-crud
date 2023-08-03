@@ -12,11 +12,11 @@ export const itemSlice = createSlice({
     },
     deleteItem: (state, action) => {
       return state.filter(item => item.name !== action.payload.name)
-    }
+    },
   }
 })
 
-export const { addItem, setItem, deleteItem } = itemSlice.actions
+export const { addItem, setItem, deleteItem, filterItem } = itemSlice.actions
 export default itemSlice.reducer
 
 export const addItemAndSave = (item) => (dispatch, getState) => {
