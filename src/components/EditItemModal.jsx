@@ -2,63 +2,80 @@ import React, { useState } from 'react'
 import { Button, Input, ModalOverlay, Modal, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, FormControl, FormLabel, Box } from '@chakra-ui/react'
 import { ErrorMessage, Field, Form, Formik } from 'formik'
 import * as Yup from 'yup';
-import { useDispatch } from 'react-redux';
-import { addItem, addItemAndSave } from '../features/itemSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { editItemAndSave } from '../features/itemSlice';
 import { useCustomToast } from '../hooks/useCustomToast';
 
-
-function AddItemModal({ isOpen, onClose: onCloseProp }) {
+function EditItemModal({ item, isOpen, onClose }) {
   const [previewImage, setPreviewImage] = useState(null);
   const [file, setFile] = useState(null);
 
   const dispatch = useDispatch()
   const { showSuccessToast, showErrorToast } = useCustomToast();
 
-  const onClose = () => {
-    setPreviewImage(null);
-    if (onCloseProp) onCloseProp();
-  };
-
   const validationSchema = Yup.object().shape({
     item_name: Yup.string().required('Required'),
     item_buy_price: Yup.number().required('Required').min(0),
     item_sell_price: Yup.number().required('Required').min(0),
-    image: Yup.mixed().required('Required')
+    image: Yup.mixed()
       .test(
         "fileSize",
         "File too large, maximum 100 KB",
-        value => value && value.size <= 1024 * 102.4
+        value => !value ||value && value.size <= 1024 * 102.4
       )
       .test(
         "fileFormat",
         "Unsupported Format",
-        value => value && (value.type === "image/jpeg" || value.type === "image/png")
+        value => !value || (value.type === "image/jpeg" || value.type === "image/png")
       ),
   })
 
   const handleSubmit = (values, { setSubmitting, resetForm, setFieldError }) => {
-    let items = JSON.parse(localStorage.getItem('items')) || [];
-
-    if (items.some(item => item.name.toLowerCase() === values.item_name.toLowerCase())) {
+    const itemDatas = JSON.parse(localStorage.getItem('items') || '[]');
+  
+    if (itemDatas.some(value => value.name.toLowerCase() === values.item_name.toLowerCase() && (value.name.toLowerCase() !== item.name.toLowerCase()))) {
       setFieldError('item_name', 'Item name already exists');
       setSubmitting(false);
       return;
     }
-
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      const base64String = reader.result;
-      const item = { name: values.item_name, buy_price: values.item_buy_price, sell_price: values.item_sell_price, image: base64String };
-
-      dispatch(addItemAndSave(item));
-      setSubmitting(false);
-      resetForm();
-      setPreviewImage(null);
-      setFile(null);
-    };
-    reader.readAsDataURL(file);
-    showSuccessToast("Item successfully added.");
+  
+    // Jika file gambar baru diupload, kita ubah ke base64, jika tidak, kita gunakan gambar yang ada sebelumnya
+    let newImage = item.image;
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        newImage = reader.result;
+  
+        // Jika gambar selesai diubah ke base64, kita lanjutkan proses update item
+        updateItem(newImage, values, setSubmitting, resetForm);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      updateItem(newImage, values, setSubmitting, resetForm);
+    }
+  }
+  
+  const updateItem = (newImage, values, setSubmitting, resetForm) => {
+    const itemDatas = JSON.parse(localStorage.getItem('items') || '[]');
+  
+    const updatedItems = itemDatas.map(data => {
+      if (data.name.toLowerCase() === item.name.toLowerCase()) {
+        return {
+          ...data,
+          name: values.item_name,
+          buy_price: values.item_buy_price,
+          sell_price: values.item_sell_price,
+          image: newImage,
+        };
+      }
+      return data;
+    });
+  
+    dispatch(editItemAndSave(updatedItems)) 
+    showSuccessToast("Item successfully edited.");
+    setSubmitting(false);
+    resetForm();
+    onClose();
   }
 
   const handleImageChange = (event, setFieldValue) => {
@@ -81,9 +98,9 @@ function AddItemModal({ isOpen, onClose: onCloseProp }) {
         <ModalContent>
           <Formik
             initialValues={{
-              item_name: '',
-              item_buy_price: '',
-              item_sell_price: '',
+              item_name: item ? item.name : '',
+              item_buy_price: item ? item.buy_price : '',
+              item_sell_price: item ? item.sell_price : '',
               image: '',
             }}
             validationSchema={validationSchema}
@@ -92,7 +109,7 @@ function AddItemModal({ isOpen, onClose: onCloseProp }) {
             {({ isSubmitting, setFieldValue, setFieldError }) => (
               <Form>
                 <Box className='bg-teal-500 text-white' roundedTop={'md'}>
-                  <ModalHeader>Add Item</ModalHeader>
+                  <ModalHeader>Edit Item</ModalHeader>
                   <ModalCloseButton className='mt-2' onClick={onClose} />
                 </Box>
                 <ModalBody >
@@ -124,7 +141,6 @@ function AddItemModal({ isOpen, onClose: onCloseProp }) {
                       />
                       <ErrorMessage name="item_sell_price" component="div" className="text-red-500 text-xs italic" />
                     </FormControl>
-
                   </Box>
                   <FormControl>
                     <FormLabel>Item Image</FormLabel>
@@ -149,7 +165,7 @@ function AddItemModal({ isOpen, onClose: onCloseProp }) {
                 </ModalBody>
 
                 <ModalFooter>
-                  <Button type="submit" colorScheme='teal' isDisabled={isSubmitting}>Submit</Button>
+                  <Button type="submit" colorScheme='teal' disabled={isSubmitting}>Submit</Button>
                 </ModalFooter>
               </Form>
             )}
@@ -160,4 +176,4 @@ function AddItemModal({ isOpen, onClose: onCloseProp }) {
   )
 }
 
-export default AddItemModal
+export default EditItemModal
