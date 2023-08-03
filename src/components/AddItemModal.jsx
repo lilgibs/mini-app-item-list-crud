@@ -47,7 +47,7 @@ function AddItemModal({ isOpen, onClose: onCloseProp }) {
     const reader = new FileReader();
 
     reader.onloadend = () => {
-      const base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+      const base64String = reader.result;
       const item = { name: values.item_name, price: values.item_price, image: base64String };
 
       dispatch(addItemAndSave(item));
