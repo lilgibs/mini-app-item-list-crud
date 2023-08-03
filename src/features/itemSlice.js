@@ -10,10 +10,13 @@ export const itemSlice = createSlice({
     setItem: (state, action) => {
       return [...action.payload]
     },
+    deleteItem: (state, action) => {
+      return state.filter(item => item.name !== action.payload.name)
+    }
   }
 })
 
-export const { addItem, setItem } = itemSlice.actions
+export const { addItem, setItem, deleteItem } = itemSlice.actions
 export default itemSlice.reducer
 
 export const addItemAndSave = (item) => (dispatch, getState) => {
@@ -27,3 +30,9 @@ export const editItemAndSave = (item) => (dispatch, getState) => {
   dispatch(setItem(item))
   localStorage.setItem('items', JSON.stringify(item));
 };
+
+export const deleteItemAndSave = (item) => (dispatch, getState) => {
+  dispatch(deleteItem(item))
+  const state = getState().items;
+  localStorage.setItem('items', JSON.stringify(state));
+}

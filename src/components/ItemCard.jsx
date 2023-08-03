@@ -1,9 +1,11 @@
 import React from 'react'
 import { Card, CardHeader, CardBody, CardFooter, Heading, Image, Divider, ButtonGroup, Button, Text, Stack, Input, ModalOverlay, Modal, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, useDisclosure, AspectRatio } from '@chakra-ui/react'
 import EditItemModal from './EditItemModal'
+import DeleteItemModal from './DeleteItemModal'
 
 function ItemCard({ item }) {
   const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure()
+  const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure()
 
   return (
 
@@ -44,9 +46,10 @@ function ItemCard({ item }) {
               Edit
             </Button>
             <EditItemModal item={item} isOpen={isEditOpen} onClose={onEditClose} />
-            <Button variant='solid' colorScheme='red'>
+            <Button variant='solid' colorScheme='red' onClick={onDeleteOpen}>
               Delete
             </Button>
+            <DeleteItemModal item={item} isOpen={isDeleteOpen} onClose={onDeleteClose} />
           </ButtonGroup>
         </CardFooter>
       </Card>
