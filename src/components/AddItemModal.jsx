@@ -3,7 +3,7 @@ import { Button, Input, ModalOverlay, Modal, ModalContent, ModalHeader, ModalClo
 import { ErrorMessage, Field, Form, Formik } from 'formik'
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
-import { addItem } from '../features/itemSlice';
+import { addItem, addItemAndSave } from '../features/itemSlice';
 
 
 function AddItemModal({ isOpen, onClose: onCloseProp }) {
@@ -50,9 +50,10 @@ function AddItemModal({ isOpen, onClose: onCloseProp }) {
       const base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
       const item = { name: values.item_name, price: values.item_price, image: base64String };
 
-      dispatch(addItem(item));
+      dispatch(addItemAndSave(item));
+      // items.push(item)
 
-      localStorage.setItem('items', JSON.stringify(items));
+      // localStorage.setItem('items', JSON.stringify(items));
 
       setSubmitting(false);
       resetForm();
