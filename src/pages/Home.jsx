@@ -1,13 +1,19 @@
 import React from 'react'
 import { Card, CardHeader, CardBody, CardFooter, Heading, Image, Divider, ButtonGroup, Button, Text, Stack, Input, ModalOverlay, Modal, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, useDisclosure } from '@chakra-ui/react'
 import AddItemModal from '../components/AddItemModal'
+import { useSelector } from 'react-redux'
+import ItemCard from '../components/ItemCard'
 
 function Home() {
+
   const { isOpen: isAddOpen, onOpen: onAddOpen, onClose: onAddClose } = useDisclosure()
 
+
+  const itemDatas = useSelector(state => state.items)
+
   return (
-    
-    <div className='max-w-6xl mx-auto flex flex-col gap-5'>
+
+    <div className='w-[90%] lg:max-w-6xl mx-auto flex flex-col gap-5'>
       <div className=' border bg-white text-teal-500 shadow-md text-center font-semibold text-5xl py-10 rounded mt-2'>
         <h1>ITEM LIST</h1>
       </div>
@@ -25,37 +31,12 @@ function Home() {
           <AddItemModal isOpen={isAddOpen} onClose={onAddClose} />
         </div>
       </div>
-      <Card maxW='sm'>
-        <CardBody>
-          <Image
-            src='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80'
-            alt='Green double couch with wooden legs'
-            borderRadius='lg'
-          />
-          <Stack mt='6' spacing='3'>
-            <Heading size='md'>Living room Sofa</Heading>
-            <Text>
-              This sofa is perfect for modern tropical spaces, baroque inspired
-              spaces, earthy toned spaces and for people who love a chic design with a
-              sprinkle of vintage design.
-            </Text>
-            <Text color='blue.600' fontSize='2xl'>
-              $450
-            </Text>
-          </Stack>
-        </CardBody>
-        <Divider />
-        <CardFooter>
-          <ButtonGroup spacing='2'>
-            <Button variant='solid' colorScheme='blue'>
-              Buy now
-            </Button>
-            <Button variant='ghost' colorScheme='blue'>
-              Add to cart
-            </Button>
-          </ButtonGroup>
-        </CardFooter>
-      </Card>
+      <div className='grid grid-cols-2 lg:grid-cols-4 gap-5'>
+        {itemDatas && itemDatas.map(item => (
+          <ItemCard item={item} />
+        ))}
+      </div>
+
     </div>
   )
 }
