@@ -30,7 +30,7 @@ function Home() {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    setFilteredItems(itemDatas.filter(item => item.name.includes(filterValue)))
+    setFilteredItems(itemDatas.filter(item => item.name.toLowerCase().includes(filterValue.toLowerCase())))
     setCurrentPage(0)
   };
 
