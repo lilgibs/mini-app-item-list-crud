@@ -4,13 +4,14 @@ import { useCustomToast } from '../hooks/useCustomToast';
 import { useDispatch } from 'react-redux';
 import { deleteItemAndSave } from '../features/itemSlice';
 
-function DeleteItemModal({ item, isOpen, onClose }) {
+function DeleteItemModal({ item, isOpen, onClose, setCurrentPage  }) {
   const dispatch = useDispatch()
   const { showSuccessToast } = useCustomToast();
 
   const handleDelete = () => {
     dispatch(deleteItemAndSave(item))
     showSuccessToast("Item successfully deleted.")
+    setCurrentPage(0);
     onClose();
   }
 

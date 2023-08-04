@@ -5,7 +5,7 @@ import DeleteItemModal from './DeleteItemModal'
 import { BiEdit, BiTrash } from 'react-icons/bi';
 import { formatRupiah } from '../utils/formatRupiah'
 
-function ItemCard({ item }) {
+function ItemCard({ item, setCurrentPage }) {
   const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure()
   const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure()
 
@@ -44,7 +44,7 @@ function ItemCard({ item }) {
             </div>
           </Stack>
         </CardBody>
-        <Divider className='text-neutral-300'/>
+        <Divider className='text-neutral-300' />
         <div className='flex gap-1 justify-end p-2'>
           <div
             className='flex gap-2 items-center w-1/2 justify-center px-2 md:px-4 py-1 sm:py-2 text-xs sm:text-base bg-green-500 hover:bg-green-600 text-white font-semibold rounded cursor-pointer'
@@ -60,7 +60,7 @@ function ItemCard({ item }) {
             <p className='hidden xl:block'>Delete</p>
           </div>
           <div className='hidden'>
-            <DeleteItemModal item={item} isOpen={isDeleteOpen} onClose={onDeleteClose} />
+            <DeleteItemModal item={item} isOpen={isDeleteOpen} onClose={onDeleteClose} setCurrentPage={setCurrentPage} />
           </div>
         </div>
       </Card>

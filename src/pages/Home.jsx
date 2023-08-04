@@ -27,7 +27,7 @@ function Home() {
 
   const currentPageData = (filteredItems || itemDatas)
     .slice(offset, offset + PER_PAGE)
-    .map((item) => <ItemCard key={item.name} item={item} />);
+    .map((item) => <ItemCard key={item.name} item={item} setCurrentPage={setCurrentPage} />);
 
   const pageCount = Math.ceil((filteredItems || itemDatas).length / PER_PAGE);
 
@@ -57,13 +57,13 @@ function Home() {
       <div className='flex flex-row gap-5 items-center justify-between bg-white border rounded p-2 md:p-4'>
         <p className='md:text-lg font-semibold text-neutral-500'>Hello, <span className=' text-teal-500'>{userGlobal.name}</span></p>
         <button
-          className='flex gap-2 items-center px-2 md:px-4 h-full md:py-2 text-sm md:text-md bg-teal-500 text-white rounded font-semibold hover:bg-teal-700'
+          className='flex gap-2 items-center px-2 md:px-4 py-2 md:py-2 text-sm md:text-md bg-teal-500 text-white rounded font-semibold hover:bg-teal-700'
           onClick={() => {
             dispatch(resetUser())
           }}
         >
           <BiLogOut />
-          <p className='hidden md:block'>Logout</p>
+          <p>Logout</p>
         </button>
       </div>
       <div className='flex flex-row-reverse gap-5 justify-between bg-white border rounded p-2 md:p-4'>
