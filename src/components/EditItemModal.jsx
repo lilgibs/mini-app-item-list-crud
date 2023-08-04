@@ -6,12 +6,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { editItemAndSave } from '../features/itemSlice';
 import { useCustomToast } from '../hooks/useCustomToast';
 
-function EditItemModal({ item, isOpen, onClose }) {
+function EditItemModal({ item, isOpen, onClose: onCloseProp }) {
   const [previewImage, setPreviewImage] = useState(null);
   const [file, setFile] = useState(null);
 
   const dispatch = useDispatch()
   const { showSuccessToast, showErrorToast } = useCustomToast();
+
+  const onClose = () => {
+    setPreviewImage(null);
+    if (onCloseProp) onCloseProp();
+  };
 
   const validationSchema = Yup.object().shape({
     item_name: Yup.string().required('Required'),

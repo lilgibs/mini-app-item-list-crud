@@ -1,11 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDisclosure } from '@chakra-ui/react'
 import AddItemModal from '../components/AddItemModal'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import ItemCard from '../components/ItemCard'
 import ReactPaginate from 'react-paginate'
 import { FaPlus, FaSearch } from 'react-icons/fa';
+import { BiLogOut } from 'react-icons/bi';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
+import { checkLoginUser, resetUser } from '../features/userSlice'
+import { useNavigate } from 'react-router-dom'
 
 
 function Home() {
@@ -14,6 +17,10 @@ function Home() {
   const [currentPage, setCurrentPage] = useState(0);
   const { isOpen: isAddOpen, onOpen: onAddOpen, onClose: onAddClose } = useDisclosure()
   const itemDatas = useSelector(state => state.items)
+  const userToken = localStorage.getItem("user_token");
+  const userGlobal = useSelector((state) => state.user);
+  const dispatch = useDispatch()
+  const nav = useNavigate()
 
   const PER_PAGE = 4;
   const offset = currentPage * PER_PAGE;
@@ -30,15 +37,34 @@ function Home() {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    setFilteredItems(itemDatas.filter(item => item.name.includes(filterValue)))
+    setFilteredItems(itemDatas.filter(item => item.name.toLowerCase().includes(filterValue.toLowerCase())))
     setCurrentPage(0)
   };
 
+  useEffect(() => {
+    if (!userGlobal) {
+      nav('/');
+    }
+  }, [userGlobal, nav]);
+
+
   return (
 
-    <div className='w-[85%] lg:max-w-6xl mx-auto flex flex-col gap-3'>
+    <div className='w-[85%] lg:max-w-6xl mx-auto flex flex-col gap-3 min-h-screen'>
       <div className=' border bg-white text-teal-500 shadow-md text-center font-semibold text-2xl sm:text-3xl md:text-5xl py-6 md:py-10 rounded mt-2'>
         <h1>ITEM LIST</h1>
+      </div>
+      <div className='flex flex-row gap-5 items-center justify-between bg-white border rounded p-2 md:p-4'>
+        <p className='md:text-lg font-semibold text-neutral-500'>Hello, <span className=' text-teal-500'>{userGlobal.name}</span></p>
+        <button
+          className='flex gap-2 items-center px-2 md:px-4 h-full md:py-2 text-sm md:text-md bg-teal-500 text-white rounded font-semibold hover:bg-teal-700'
+          onClick={() => {
+            dispatch(resetUser())
+          }}
+        >
+          <BiLogOut />
+          <p className='hidden md:block'>Logout</p>
+        </button>
       </div>
       <div className='flex flex-row-reverse gap-5 justify-between bg-white border rounded p-2 md:p-4'>
         <div className='flex-grow'>
@@ -54,7 +80,7 @@ function Home() {
                 className="bg-teal-500 hover:bg-teal-600 font-semibold text-white py-2 md:py-3 px-4 rounded-e-md"
                 type='submit'
               >
-                <FaSearch/>
+                <FaSearch />
               </button>
             </div>
           </form>
@@ -64,7 +90,7 @@ function Home() {
             className='flex gap-2 items-center px-2 md:px-4 h-full md:py-2 text-sm md:text-md bg-teal-500 text-white rounded font-semibold hover:bg-teal-700'
             onClick={onAddOpen}
           >
-            <FaPlus/>
+            <FaPlus />
             <p className='hidden md:block'>Add Item</p>
           </button>
         </div>
@@ -76,7 +102,7 @@ function Home() {
         {/* {(filteredItems || itemDatas).map(item => (
           <ItemCard item={item} />
         ))} */}
-        {currentPageData.length ? currentPageData : <p>Looks like you have no items. Start by adding one!</p>}
+        {currentPageData.length ? currentPageData : <p className=''>Looks like you have no items. Start by adding one!</p>}
       </div>
       <ReactPaginate
         previousLabel={<IoIosArrowBack />}
