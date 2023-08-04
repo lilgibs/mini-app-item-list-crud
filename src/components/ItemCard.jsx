@@ -26,21 +26,21 @@ function ItemCard({ item }) {
           <Stack>
             <p className='text-md sm:text-lg md:text-2xl font-semibold truncate' >{item.name}</p>
             <div className='flex flex-col sm:flex-row gap-1'>
-              <div className='flex flex-col sm:w-1/2 text-left -space-y-1 sm:-space-y-0'>
-                <p className='text-xs lg:text-md text-neutral-500'>Buy Price</p>
-                <p className='font-semibold text-xs lg:text-base xl:text-xl'>
+              <div className='flex flex-row gap-1 sm:gap-0 sm:flex-col sm:w-1/2 sm:text-left'>
+                <p className='text-xs sm:text-sm lg:text-md text-neutral-500 w-1/3 sm:w-auto'>Buy Price</p>
+                <p className='font-semibold text-xs sm:text-sm lg:text-base xl:text-lg'>
                   {formatRupiah(item.buy_price)}
                 </p>
               </div>
-              <div className='flex flex-col sm:w-1/2 sm:text-right -space-y-1 sm:-space-y-0'>
-                <p className='text-xs lg:text-md text-neutral-500'>Sell Price</p>
-                <p className='font-semibold text-xs lg:text-base xl:text-xl'>
+              <div className='flex flex-row gap-1 sm:gap-0 sm:flex-col sm:w-1/2 sm:text-right'>
+                <p className='text-xs sm:text-sm lg:text-md text-neutral-500 w-1/3 sm:w-auto'>Sell Price</p>
+                <p className='font-semibold text-xs sm:text-sm lg:text-base xl:text-lg'>
                   {formatRupiah(item.sell_price)}
                 </p>
               </div>
             </div>
             <div className='text-right text-neutral-500'>
-              {/* <p>Stock {item.stock}</p> */}
+              <p className='font-semibold text-xs sm:text-sm lg:text-base'>Stock {item.stock}</p>
             </div>
           </Stack>
         </CardBody>

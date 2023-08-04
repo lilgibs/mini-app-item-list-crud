@@ -23,6 +23,7 @@ function AddItemModal({ isOpen, onClose: onCloseProp }) {
     item_name: Yup.string().required('Required'),
     item_buy_price: Yup.number().required('Required').min(0),
     item_sell_price: Yup.number().required('Required').min(0),
+    item_stock: Yup.number().required('Required').min(0),
     image: Yup.mixed().required('Required')
       .test(
         "fileSize",
@@ -49,7 +50,13 @@ function AddItemModal({ isOpen, onClose: onCloseProp }) {
 
     reader.onloadend = () => {
       const base64String = reader.result;
-      const item = { name: values.item_name, buy_price: values.item_buy_price, sell_price: values.item_sell_price, image: base64String };
+      const item = {
+        name: values.item_name,
+        buy_price: values.item_buy_price,
+        sell_price: values.item_sell_price,
+        stock: values.item_stock,
+        image: base64String
+      };
 
       dispatch(addItemAndSave(item));
       setSubmitting(false);
@@ -84,6 +91,7 @@ function AddItemModal({ isOpen, onClose: onCloseProp }) {
               item_name: '',
               item_buy_price: '',
               item_sell_price: '',
+              item_stock: '',
               image: '',
             }}
             validationSchema={validationSchema}
@@ -124,8 +132,16 @@ function AddItemModal({ isOpen, onClose: onCloseProp }) {
                       />
                       <ErrorMessage name="item_sell_price" component="div" className="text-red-500 text-xs italic" />
                     </FormControl>
-
                   </Box>
+                  <FormControl mb={3}>
+                      <FormLabel>Item Stock</FormLabel>
+                      <Field
+                        as={Input}
+                        name='item_stock'
+                        placeholder="Enter item stock"
+                      />
+                      <ErrorMessage name="item_stock" component="div" className="text-red-500 text-xs italic" />
+                    </FormControl>
                   <FormControl>
                     <FormLabel>Item Image</FormLabel>
                     <div

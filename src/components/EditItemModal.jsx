@@ -17,11 +17,12 @@ function EditItemModal({ item, isOpen, onClose }) {
     item_name: Yup.string().required('Required'),
     item_buy_price: Yup.number().required('Required').min(0),
     item_sell_price: Yup.number().required('Required').min(0),
+    item_stock: Yup.number().required('Required').min(0),
     image: Yup.mixed()
       .test(
         "fileSize",
         "File too large, maximum 100 KB",
-        value => !value ||value && value.size <= 1024 * 102.4
+        value => !value || value && value.size <= 1024 * 102.4
       )
       .test(
         "fileFormat",
@@ -32,20 +33,20 @@ function EditItemModal({ item, isOpen, onClose }) {
 
   const handleSubmit = (values, { setSubmitting, resetForm, setFieldError }) => {
     const itemDatas = JSON.parse(localStorage.getItem('items') || '[]');
-  
+
     if (itemDatas.some(value => value.name.toLowerCase() === values.item_name.toLowerCase() && (value.name.toLowerCase() !== item.name.toLowerCase()))) {
       setFieldError('item_name', 'Item name already exists');
       setSubmitting(false);
       return;
     }
-  
+
     // Jika file gambar baru diupload, kita ubah ke base64, jika tidak, kita gunakan gambar yang ada sebelumnya
     let newImage = item.image;
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
         newImage = reader.result;
-  
+
         // Jika gambar selesai diubah ke base64, kita lanjutkan proses update item
         updateItem(newImage, values, setSubmitting, resetForm);
       };
@@ -54,10 +55,10 @@ function EditItemModal({ item, isOpen, onClose }) {
       updateItem(newImage, values, setSubmitting, resetForm);
     }
   }
-  
+
   const updateItem = (newImage, values, setSubmitting, resetForm) => {
     const itemDatas = JSON.parse(localStorage.getItem('items') || '[]');
-  
+
     const updatedItems = itemDatas.map(data => {
       if (data.name.toLowerCase() === item.name.toLowerCase()) {
         return {
@@ -65,13 +66,14 @@ function EditItemModal({ item, isOpen, onClose }) {
           name: values.item_name,
           buy_price: values.item_buy_price,
           sell_price: values.item_sell_price,
+          stock: values.item_stock,
           image: newImage,
         };
       }
       return data;
     });
-  
-    dispatch(editItemAndSave(updatedItems)) 
+
+    dispatch(editItemAndSave(updatedItems))
     showSuccessToast("Item successfully edited.");
     setSubmitting(false);
     resetForm();
@@ -101,6 +103,7 @@ function EditItemModal({ item, isOpen, onClose }) {
               item_name: item ? item.name : '',
               item_buy_price: item ? item.buy_price : '',
               item_sell_price: item ? item.sell_price : '',
+              item_stock: item ? item.stock : '',
               image: '',
             }}
             validationSchema={validationSchema}
@@ -142,6 +145,15 @@ function EditItemModal({ item, isOpen, onClose }) {
                       <ErrorMessage name="item_sell_price" component="div" className="text-red-500 text-xs italic" />
                     </FormControl>
                   </Box>
+                  <FormControl mb={3}>
+                    <FormLabel>Item Stock</FormLabel>
+                    <Field
+                      as={Input}
+                      name='item_stock'
+                      placeholder="Enter item sell price"
+                    />
+                    <ErrorMessage name="item_stock" component="div" className="text-red-500 text-xs italic" />
+                  </FormControl>
                   <FormControl>
                     <FormLabel>Item Image</FormLabel>
                     <div
