@@ -5,10 +5,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../features/userSlice';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import CustomSpinner from '../components/Spinner';
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const userGlobal = useSelector((state) => state.user);
   const navigate = useNavigate();
@@ -19,10 +21,13 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault()
     try {
+      setIsLoading(true)
       await dispatch(loginUser({ username, password }))
       showSuccessToast("Login successfully.")
     } catch (error) {
       showErrorToast("Login failed. Username or password is wrong.")
+    } finally{
+      setIsLoading(false)
     }
   }
 
@@ -32,8 +37,10 @@ function Login() {
     }
   }, [userGlobal]);
 
+
   return (
     <div className='flex h-screen w-full bg-neutral-100'>
+      {isLoading && <CustomSpinner />}
       <div className='hidden lg:w-[60%] bg-gradient-to-r from-teal-500 h-screen lg:flex justify-center items-center'>
         <p className=' font-bold text-5xl text-neutral-700'>WELCOME BACK!</p>
       </div>
@@ -52,7 +59,7 @@ function Login() {
                 className='w-full rounded px-4 py-2 border bg-neutral-50'
                 name="username"
                 type='text'
-                placeholder='Username (admin/user)'
+                placeholder='Username ("admin" or "user")'
                 onChange={(e) => setUsername(e.target.value)}
               />
             </div>
@@ -62,7 +69,7 @@ function Login() {
                 className='w-full rounded px-4 py-2 border bg-neutral-50'
                 name="password"
                 type='password'
-                placeholder='Password (admin/user)'
+                placeholder='Password ("admin" or "user")'
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>

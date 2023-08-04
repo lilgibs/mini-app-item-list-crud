@@ -10,6 +10,7 @@ import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { checkLoginUser, resetUser } from '../features/userSlice'
 import { useNavigate } from 'react-router-dom'
 import Footer from '../components/Footer'
+import { useCustomToast } from '../hooks/useCustomToast'
 
 
 function Home() {
@@ -22,6 +23,7 @@ function Home() {
   const userGlobal = useSelector((state) => state.user);
   const dispatch = useDispatch()
   const nav = useNavigate()
+  const { showSuccessToast } = useCustomToast();
 
   const PER_PAGE = 4;
   const offset = currentPage * PER_PAGE;
@@ -61,6 +63,7 @@ function Home() {
             className='flex gap-2 items-center px-2 md:px-4 py-2 md:py-2 text-sm md:text-md bg-teal-500 text-white rounded font-semibold hover:bg-teal-700'
             onClick={() => {
               dispatch(resetUser())
+              showSuccessToast("Logged out")
             }}
           >
             <BiLogOut />
