@@ -167,7 +167,7 @@ function EditItemModal({ item, isOpen, onClose: onCloseProp }) {
                       {previewImage ?
                         <img src={previewImage} alt="Preview" className='h-[95%]' />
                         :
-                        <p className='text-teal-500 font-semibold'>Upload Image</p>
+                        <p className='text-teal-500 font-semibold'>Upload New Image</p>
                       }
                     </div>
                     <input
