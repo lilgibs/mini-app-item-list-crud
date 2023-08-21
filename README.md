@@ -1,70 +1,66 @@
-# Getting Started with Create React App
+# 📋 Item List CRUD Serverless
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+🎉 Welcome to the Item List CRUD Serverless app! This web application allows you to manage a list of items using serverless CRUD operations with local storage. The app includes authentication functionality with a simple login API and uses Redux Toolkit for state management.
 
-## Available Scripts
+![Item List App Screenshot](https://firebasestorage.googleapis.com/v0/b/mini-app-item-list.appspot.com/o/Item%20List%20CRUD%20Serverless.PNG?alt=media&token=250de6f8-5a2a-4419-8153-a87e62bdf19b)
 
-In the project directory, you can run:
+## 🌟 Features
 
-### `npm start`
+- ✏️ Create, read, update, and delete (CRUD) items using serverless operations with local storage.
+- 🖼️ Manage item images by converting them to Base64 format.
+- 🔒 Authenticate using a simple login API with predefined username and password.
+- 🔄 Utilize Redux Toolkit for efficient state management.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 🌐 Live Demo
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Check out the live demo of the app hosted on Vercel:
+[**Visit Item List CRUD Serverless App**](https://mini-app-item-list-crud.vercel.app/)
 
-### `npm test`
+## 🚀 Getting Started
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. **Clone or download** this repository to your local machine.
+2. Open a terminal or command prompt and navigate to the repository directory.
+3. **Install dependencies** with the command:
+    ```sh
+    npm install
+    ```
+4. **Start the application** in development mode by running:
+    ```sh
+    npm start
+    ```
+   Open [http://localhost:3000](http://localhost:3000) in your browser to view the application.
 
-### `npm run build`
+## 🔑 Authentication
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+For authentication, use the following credentials:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **Admin:** 
+  - Username: admin
+  - Password: admin
+- **User:** 
+  - Username: user
+  - Password: user
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 📚 Login API Repository
 
-### `npm run eject`
+The code for the simple login API used in this app can be found in the following repository:
+[**Login API Repository**](https://github.com/lilgibs/api-mini-app-item-list-crud)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 🛠️ Technologies
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- [React](https://reactjs.org/)
+- [Redux Toolkit](https://redux-toolkit.js.org/)
+- [Local Storage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)
+- [Base64 Image Encoding](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/btoa)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 👤 Developers
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- **Khahlil Gibran Hadi** - [GitHub Profile](https://github.com/lilgibs)
 
-## Learn More
+## 🤝 Contributions
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Contributions from the community are highly appreciated. If you'd like to contribute, please fork this repository, make your changes, and submit a pull request.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 📜 License
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This application is licensed under the [MIT License](https://opensource.org/licenses/MIT).
