@@ -31,11 +31,11 @@ function Login() {
     }
   }
 
-  useEffect(() => {
-    if (userGlobal.id) {
-      navigate('/items');
-    }
-  }, [userGlobal]);
+  // useEffect(() => {
+  //   if (userGlobal.id) {
+  //     navigate('/items');
+  //   }
+  // }, [userGlobal]);
 
 
   return (

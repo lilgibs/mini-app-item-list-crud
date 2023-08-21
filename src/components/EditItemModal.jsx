@@ -20,20 +20,8 @@ function EditItemModal({ item, isOpen, onClose: onCloseProp }) {
 
   const validationSchema = Yup.object().shape({
     item_name: Yup.string().required('Required'),
-    item_buy_price: Yup.number().required('Required').min(0),
-    item_sell_price: Yup.number().required('Required').min(0),
-    item_stock: Yup.number().required('Required').min(0),
-    image: Yup.mixed()
-      .test(
-        "fileSize",
-        "File too large, maximum 100 KB",
-        value => !value || value && value.size <= 1024 * 102.4
-      )
-      .test(
-        "fileFormat",
-        "Unsupported Format",
-        value => !value || (value.type === "image/jpeg" || value.type === "image/png")
-      ),
+    item_gender: Yup.string().required('Required'),
+    item_age: Yup.number().required('Required').min(0),
   })
 
   const handleSubmit = (values, { setSubmitting, resetForm, setFieldError }) => {
@@ -44,35 +32,21 @@ function EditItemModal({ item, isOpen, onClose: onCloseProp }) {
       setSubmitting(false);
       return;
     }
+    updateItem(values, setSubmitting, resetForm);
 
-    // Jika file gambar baru diupload, kita ubah ke base64, jika tidak, kita gunakan gambar yang ada sebelumnya
-    let newImage = item.image;
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        newImage = reader.result;
-
-        // Jika gambar selesai diubah ke base64, kita lanjutkan proses update item
-        updateItem(newImage, values, setSubmitting, resetForm);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      updateItem(newImage, values, setSubmitting, resetForm);
-    }
   }
 
-  const updateItem = (newImage, values, setSubmitting, resetForm) => {
+  const updateItem = (values, setSubmitting, resetForm) => {
     const itemDatas = JSON.parse(localStorage.getItem('items') || '[]');
 
     const updatedItems = itemDatas.map(data => {
-      if (data.name.toLowerCase() === item.name.toLowerCase()) {
+      // if (data.name.toLowerCase() === item.name.toLowerCase()) {
+      if (data.id === item.id) {
         return {
           ...data,
           name: values.item_name,
-          buy_price: values.item_buy_price,
-          sell_price: values.item_sell_price,
-          stock: values.item_stock,
-          image: newImage,
+          age: values.item_age,
+          gender: values.item_gender,
         };
       }
       return data;
@@ -85,19 +59,6 @@ function EditItemModal({ item, isOpen, onClose: onCloseProp }) {
     onClose();
   }
 
-  const handleImageChange = (event, setFieldValue) => {
-    const file = event.target.files[0];
-    if (file) {
-      setFile(file);
-      setFieldValue('image', file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewImage(reader.result);
-      }
-      reader.readAsDataURL(file);
-    }
-  };
-
   return (
     <div>
       <Modal blockScrollOnMount={false} isOpen={isOpen} onClose={onClose} size={{ base: 'xs', sm: 'lg' }}>
@@ -106,10 +67,8 @@ function EditItemModal({ item, isOpen, onClose: onCloseProp }) {
           <Formik
             initialValues={{
               item_name: item ? item.name : '',
-              item_buy_price: item ? item.buy_price : '',
-              item_sell_price: item ? item.sell_price : '',
-              item_stock: item ? item.stock : '',
-              image: '',
+              item_gender: item ? item.gender : '',
+              item_age: item ? item.age : '',
             }}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
@@ -122,7 +81,7 @@ function EditItemModal({ item, isOpen, onClose: onCloseProp }) {
                 </Box>
                 <ModalBody >
                   <FormControl mb={3}>
-                    <FormLabel>Item Name</FormLabel>
+                    <FormLabel>Name</FormLabel>
                     <Field
                       as={Input}
                       name='item_name'
@@ -132,57 +91,28 @@ function EditItemModal({ item, isOpen, onClose: onCloseProp }) {
                   </FormControl>
                   <Box className='flex gap-3'>
                     <FormControl mb={3}>
-                      <FormLabel>Item Buy Price</FormLabel>
+                      <FormLabel>Gender</FormLabel>
                       <Field
                         as={Input}
-                        name='item_buy_price'
-                        placeholder="Enter item buy price"
+                        name='item_gender'
+                        placeholder="Enter item gender"
                       />
-                      <ErrorMessage name="item_buy_price" component="div" className="text-red-500 text-xs italic" />
+                      <ErrorMessage name="item_gender" component="div" className="text-red-500 text-xs italic" />
                     </FormControl>
                     <FormControl mb={3}>
-                      <FormLabel>Item Sell Price</FormLabel>
+                      <FormLabel>Age</FormLabel>
                       <Field
                         as={Input}
-                        name='item_sell_price'
-                        placeholder="Enter item sell price"
+                        name='item_age'
+                        placeholder="Enter item age"
                       />
-                      <ErrorMessage name="item_sell_price" component="div" className="text-red-500 text-xs italic" />
+                      <ErrorMessage name="item_age" component="div" className="text-red-500 text-xs italic" />
                     </FormControl>
                   </Box>
-                  <FormControl mb={3}>
-                    <FormLabel>Item Stock</FormLabel>
-                    <Field
-                      as={Input}
-                      name='item_stock'
-                      placeholder="Enter item sell price"
-                    />
-                    <ErrorMessage name="item_stock" component="div" className="text-red-500 text-xs italic" />
-                  </FormControl>
-                  <FormControl>
-                    <FormLabel>Item Image</FormLabel>
-                    <div
-                      onClick={() => document.getElementById(`image`).click()}
-                      className='flex justify-center items-center border border-teal-500 border-dashed w-full rounded text-center cursor-pointer hover:bg-neutral-100 h-40'>
-                      {previewImage ?
-                        <img src={previewImage} alt="Preview" className='h-[95%]' />
-                        :
-                        <p className='text-teal-500 font-semibold'>Upload New Image</p>
-                      }
-                    </div>
-                    <input
-                      id='image'
-                      name='image'
-                      type="file"
-                      onChange={(event) => handleImageChange(event, setFieldValue, setFieldError)}
-                      hidden
-                    />
-                    <ErrorMessage name="image" component="div" className="text-red-500 text-xs italic" />
-                  </FormControl>
                 </ModalBody>
 
                 <ModalFooter>
-                  <Button type="submit" colorScheme='teal' disabled={isSubmitting}>Submit</Button>
+                  <Button type="submit" colorScheme='teal' isDisabled={isSubmitting}>Submit</Button>
                 </ModalFooter>
               </Form>
             )}

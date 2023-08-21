@@ -5,13 +5,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import ItemCard from '../components/ItemCard'
 import ReactPaginate from 'react-paginate'
 import { FaPlus, FaSearch } from 'react-icons/fa';
-import { BiLogOut } from 'react-icons/bi';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
-import { checkLoginUser, resetUser } from '../features/userSlice'
-import { useNavigate } from 'react-router-dom'
-import Footer from '../components/Footer'
 import { useCustomToast } from '../hooks/useCustomToast'
-
 
 function Home() {
   const [filterValue, setFilterValue] = useState("");
@@ -19,10 +14,7 @@ function Home() {
   const [currentPage, setCurrentPage] = useState(0);
   const { isOpen: isAddOpen, onOpen: onAddOpen, onClose: onAddClose } = useDisclosure()
   const itemDatas = useSelector(state => state.items)
-  const userToken = localStorage.getItem("user_token");
-  const userGlobal = useSelector((state) => state.user);
   const dispatch = useDispatch()
-  const nav = useNavigate()
   const { showSuccessToast } = useCustomToast();
 
   const PER_PAGE = 4;
@@ -44,31 +36,11 @@ function Home() {
     setCurrentPage(0)
   };
 
-  useEffect(() => {
-    if (!userGlobal) {
-      nav('/');
-    }
-  }, [userGlobal, nav]);
-
-
   return (
     <>
       <div className='w-[85%] lg:max-w-6xl mx-auto flex flex-col gap-3 min-h-screen'>
         <div className=' border bg-white text-teal-500 shadow-md text-center font-semibold text-2xl sm:text-3xl md:text-5xl py-6 md:py-10 rounded mt-2'>
           <h1>ITEM LIST</h1>
-        </div>
-        <div className='flex flex-row gap-5 items-center justify-between bg-white border rounded p-2 md:p-4'>
-          <p className='md:text-lg font-semibold text-neutral-500'>Hello, <span className=' text-teal-500'>{userGlobal.name}</span></p>
-          <button
-            className='flex gap-2 items-center px-2 md:px-4 py-2 md:py-2 text-sm md:text-md bg-teal-500 text-white rounded font-semibold hover:bg-teal-700'
-            onClick={() => {
-              dispatch(resetUser())
-              showSuccessToast("Logged out")
-            }}
-          >
-            <BiLogOut />
-            <p>Logout</p>
-          </button>
         </div>
         <div className='flex flex-row-reverse gap-5 justify-between bg-white border rounded p-2 md:p-4'>
           <div className='flex-grow'>
@@ -102,10 +74,12 @@ function Home() {
             <AddItemModal isOpen={isAddOpen} onClose={onAddClose} />
           </div>
         </div>
-        <div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 bg-white rounded border p-4'>
-          {/* {(filteredItems || itemDatas).map(item => (
-          <ItemCard item={item} />
-        ))} */}
+        <div className='flex flex-col bg-white rounded border p-4'>
+          <div className='flex justify-between font-bold'>
+            <p>Name</p>
+            <p>Gender</p>
+            <p>Age</p>
+          </div>
           {currentPageData.length ? currentPageData : <p className=''>Looks like you have no items. Start by adding one!</p>}
         </div>
         <ReactPaginate
@@ -127,7 +101,6 @@ function Home() {
           activeClassName={`active font-semibold text-teal-500 border-b-2 border-b-teal-500 `}
         />
       </div>
-      <Footer />
     </>
 
 
